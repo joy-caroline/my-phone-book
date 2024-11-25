@@ -1,22 +1,68 @@
 import ContactCard from "@/components/ContactCard";
 import EmptyContacts from "@/components/EmptyContacts";
+import { ThemedView } from "@/components/ThemedView";
+
+import { StyleSheet, Pressable, Text } from "react-native";
+import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
-  const contacts = [];
+  const router = useRouter();
+
   const hasContact = [
     { name: "John" },
     { name: "Luisa" },
-    { name: " Doe" },
+    { name: "Doe" },
     { name: "Sophia" },
   ];
 
+  //Descomente para ver o estado de vazio
+  // const hasContact = [];
+
   const renderContacts = () => {
-    hasContact ? (
-      hasContact.map((contact) => <ContactCard contact={contact.name} />)
+    return hasContact.length > 0 ? (
+      hasContact.map((contact) => (
+        <ContactCard key={contact.name} contact={contact} />
+      ))
     ) : (
       <EmptyContacts />
     );
   };
 
-  return <>{renderContacts()}</>;
+  return (
+    <ThemedView style={styles.container}>
+      {renderContacts()}{" "}
+      {hasContact.length > 0 && (
+        <Pressable
+          style={styles.button}
+          onPress={() => router.push("/register")}
+        >
+          <Text style={styles.buttonText}>Adicionar Contato</Text>
+        </Pressable>
+      )}
+    </ThemedView>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 16,
+    padding: 16,
+    maxWidth: 350,
+    width: "100%",
+  },
+  button: {
+    backgroundColor: "#BBB",
+    padding: 12,
+    borderRadius: 8,
+    marginTop: 16,
+    alignItems: "center",
+  },
+  buttonText: {
+    color: "#000",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+});

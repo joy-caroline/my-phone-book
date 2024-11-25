@@ -1,7 +1,7 @@
 import React from "react";
 
 
-const DetailsPage: React.FC = () => {
+export default function DetailsPage () {
  
   return (
     <div>Pagina de detalhes</div>
