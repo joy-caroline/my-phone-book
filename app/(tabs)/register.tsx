@@ -39,7 +39,7 @@ export default function TabTwoScreen() {
       </Collapsible>
       <Collapsible title="Android, iOS, and web support">
         <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
+          You can open this project on Android JNSGNNGS, iOS, and the web. To open the web version, press{' '}
           <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
         </ThemedText>
       </Collapsible>
