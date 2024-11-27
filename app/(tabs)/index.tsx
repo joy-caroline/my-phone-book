@@ -2,7 +2,7 @@ import ContactCard from "@/components/ContactCard";
 import EmptyContacts from "@/components/EmptyContacts";
 import { ThemedView } from "@/components/ThemedView";
 
-import { StyleSheet, Pressable, Text } from "react-native";
+import { StyleSheet, Pressable, Text, Dimensions } from "react-native";
 import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
@@ -43,6 +43,8 @@ export default function HomeScreen() {
   );
 }
 
+const screenWidth = Dimensions.get("window").width;
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
@@ -50,7 +52,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     margin: 16,
     padding: 16,
-    maxWidth: 350,
+    maxWidth: screenWidth * 0.95,
     width: "100%",
   },
   button: {
