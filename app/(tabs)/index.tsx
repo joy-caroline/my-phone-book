@@ -30,6 +30,9 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      {hasContact && (
+        <Text style={styles.title}>Meus Contatos</Text>
+      )}
       {renderContacts()}{" "}
       {hasContact.length > 0 && (
         <Pressable
@@ -50,10 +53,18 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    margin: 16,
     padding: 16,
-    maxWidth: screenWidth * 0.95,
+    maxWidth: screenWidth,
     width: "100%",
+    paddingTop: 32,
+  },
+  title: {
+    fontSize: 24, 
+    fontWeight: 'bold',
+    color: '#000', 
+    marginBottom: 8, 
+    paddingBottom: 16, 
+    textAlign: "center"
   },
   button: {
     backgroundColor: "#BBB",
@@ -61,6 +72,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 16,
     alignItems: "center",
+    width: screenWidth * 0.4,
+    height: "auto"
   },
   buttonText: {
     color: "#000",
