@@ -25,39 +25,42 @@ export function useContactsDatabase(){
             return newId;
         } catch (error) {
             console.error(error)
-            throw error;
+            throw new Error('Falha ao cadastrar contato!');
         }
 
     }
 
-    async function read(id?: any | null): Promise<Contact | Contact[] | null> {
+    async function findAll(): Promise<Contact | Contact[] | null> {
         try {
-            if (id === null || id === undefined) {
-                // Buscar todos os contatos
-                const result = await dbAdapter.getAllAsync<Contact>(`SELECT id, name, phone, email FROM contact`);
+            const result = await dbAdapter.getAllAsync<Contact>(`SELECT id, name FROM contact`);
     
-                // Retornar todos os resultados como um array
-                return result;
-            } else {
-                // Buscar um contato específico pelo ID
-                const result = await dbAdapter.getFirstAsync<Contact>(`SELECT id, name, phone, email FROM contact WHERE id = $id`, {$id: id});
-                    
-                return result;
-
-            }
+            // Retornar todos os resultados como um array
+            return result;
         } catch (error) {
             console.error('Erro ao executar consulta:', error);
-            throw error;
+            throw new Error('Falha ao buscar contatos!');
         }
     }
 
-    async function updateOne(id: Number){
-        return [];
+    async function findById(id: number): Promise<Contact | null>{
+        try {
+            const result = await dbAdapter.getFirstAsync<Contact>(`SELECT id, name, phone, email FROM contact WHERE id = ?`, id);
+    
+            // Retornar todos os resultados como um array
+            return result;
+        } catch (error) {
+            console.error('Erro ao executar consulta:', error);
+            throw new Error(`Falha ao buscar contato de ID: ${id}!`);
+        }
     }
 
-    async function deleteOne(){
-        return [];
+    async function updateOne(id: Number): Promise<Boolean | Error>{
+        return true;
     }
 
-    return { create, read }
+    async function deleteOne(): Promise<Boolean | Error>{
+        return true;
+    }
+
+    return { create, findAll, findById, updateOne, deleteOne }
 }
