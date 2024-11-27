@@ -1,21 +1,28 @@
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, Pressable, StyleSheet } from "react-native";
 import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useRouter } from "expo-router";
 
 interface ContactCardProps {
   contact: {
+    id: number;
     name: string;
   };
 }
 export default function ContactCard({ contact }: ContactCardProps) {
+  const router = useRouter();
+
+  const redirectDetails = () => {
+    router.push(`/details/${contact.id}`);
+  };
   return (
-    <ThemedView style={styles.container}>
+    <Pressable style={styles.container} onPress={redirectDetails}>
       <MaterialIcons size={32} name="person" color="#000" />
       <ThemedText style={styles.contact} type="title">
         {contact.name}{" "}
       </ThemedText>
-    </ThemedView>
+    </Pressable>
   );
 }
 
@@ -33,7 +40,7 @@ const styles = StyleSheet.create({
     padding: 16,
     height: 60,
     gap: 16,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   contact: {
     color: "#000",
