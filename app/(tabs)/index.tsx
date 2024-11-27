@@ -9,10 +9,10 @@ export default function HomeScreen() {
   const router = useRouter();
 
   const hasContact = [
-    { name: "John" },
-    { name: "Luisa" },
-    { name: "Doe" },
-    { name: "Sophia" },
+    { id: 1, name: "John" },
+    { id: 2, name: "Luisa" },
+    { id: 3, name: "Doe" },
+    { id: 4, name: "Sophia" },
   ];
 
   //Descomente para ver o estado de vazio
@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 16,
     alignItems: "center",
-    width: screenWidth * 0.4,
+    width: screenWidth * 0.6,
     height: "auto"
   },
   buttonText: {
