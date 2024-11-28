@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { TouchableOpacity, Text, View, TextInput, Alert, StyleSheet} from 'react-native';
 
 
-export default function CadastroScreen({ navigation }) {
+export default function CadastroScreen() {
+  const navigation = useNavigation();
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
   const [email, setEmail] = useState('');
@@ -19,22 +21,21 @@ export default function CadastroScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Cadastro</Text>
-      <Text style={styles.label}>Nome</Text>
+      <Text className='label'>Nome</Text>
       <TextInput
         style={styles.input}
         placeholder="Digite o nome da pessoa"
         value={nome}
         onChangeText={setNome}
       />
-      <Text style={styles.label}>Número de telefone</Text>
+      <Text className='label'>Número de telefone</Text>
       <TextInput
         style={styles.input}
         placeholder="Digite o número de contato"
         value={telefone}
         onChangeText={setTelefone}
-        secureTextEntry
       />
-      <Text style={styles.label}>Endereço de e-mail</Text>
+      <Text className='label'>Endereço de e-mail</Text>
       <TextInput
         style={styles.input}
         placeholder="Digite o endereço de e-mail"
