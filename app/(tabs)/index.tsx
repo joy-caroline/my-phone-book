@@ -2,17 +2,17 @@ import ContactCard from "@/components/ContactCard";
 import EmptyContacts from "@/components/EmptyContacts";
 import { ThemedView } from "@/components/ThemedView";
 
-import { StyleSheet, Pressable, Text } from "react-native";
+import { StyleSheet, Pressable, Text, Dimensions } from "react-native";
 import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
   const router = useRouter();
 
   const hasContact = [
-    { name: "John" },
-    { name: "Luisa" },
-    { name: "Doe" },
-    { name: "Sophia" },
+    { id: 1, name: "John" },
+    { id: 2, name: "Luisa" },
+    { id: 3, name: "Doe" },
+    { id: 4, name: "Sophia" },
   ];
 
   //Descomente para ver o estado de vazio
@@ -30,6 +30,9 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
+      {hasContact && (
+        <Text style={styles.title}>Meus Contatos</Text>
+      )}
       {renderContacts()}{" "}
       {hasContact.length > 0 && (
         <Pressable
@@ -43,15 +46,25 @@ export default function HomeScreen() {
   );
 }
 
+const screenWidth = Dimensions.get("window").width;
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    margin: 16,
     padding: 16,
-    maxWidth: 350,
+    maxWidth: screenWidth,
     width: "100%",
+    paddingTop: 32,
+  },
+  title: {
+    fontSize: 24, 
+    fontWeight: 'bold',
+    color: '#000', 
+    marginBottom: 8, 
+    paddingBottom: 16, 
+    textAlign: "center"
   },
   button: {
     backgroundColor: "#BBB",
@@ -59,6 +72,8 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 16,
     alignItems: "center",
+    width: screenWidth * 0.6,
+    height: "auto"
   },
   buttonText: {
     color: "#000",
