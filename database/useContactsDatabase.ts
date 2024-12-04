@@ -11,14 +11,16 @@ export function useContactsDatabase(){
     const dbAdapter = useSQLiteContext();
     
     async function create(data: Omit<Contact, "id">){
-        try {
-            const stmt = await dbAdapter.prepareAsync("INSERT INTO contacts (name, phone, email) VALUES ($name, $phone, $email)");
+        validateContact(data);
 
+        const stmt = await dbAdapter.prepareAsync("INSERT INTO contact (name, phone, email) VALUES ($name, $phone, $email)");
+        try {
+           
             const result = await stmt.executeAsync({
                 $name: data.name,
                 $phone: data.phone,
                 $email: data.email
-            })
+            });
 
             const newId = result.lastInsertRowId.toString();
 
@@ -26,6 +28,8 @@ export function useContactsDatabase(){
         } catch (error) {
             console.error(error)
             throw new Error('Falha ao cadastrar contato!');
+        } finally {
+            await stmt.finalizeAsync();
         }
 
     }
@@ -54,11 +58,49 @@ export function useContactsDatabase(){
         }
     }
 
-    async function updateOne(id: Number): Promise<Boolean | Error>{
-        return true;
+    async function updateOne(data: Contact ): Promise<Boolean | Error>{
+        validateContact(data);
+        const stmt = await dbAdapter.prepareAsync("UPDATE contact SET name = $name, phone = $phone, email = $email WHERE id = $id");
+        try {
+            await stmt.executeAsync({
+                $id: data.id,
+                $name: data.name,
+                $phone: data.phone,
+                $email: data.email
+            });
+
+            return true;
+        } catch (error) {
+            console.error('Erro ao executar consulta:', error);
+            throw new Error(`Falha ao atualizar contato de ID: ${data.id}!`);
+        } finally {
+            await stmt.finalizeAsync();
+        }
+       
     }
 
-    async function deleteOne(): Promise<Boolean | Error>{
+    async function deleteOne(id: number): Promise<Boolean | Error>{
+        const stmt = await dbAdapter.prepareAsync("DELETE FROM contact WHERE id = $id");
+        try {
+            await stmt.executeAsync({
+                $id: id
+            });
+
+            return true;
+        } catch (error) {
+            console.error('Erro ao executar consulta:', error);
+            throw new Error(`Falha ao atualizar contato de ID: ${id}!`);
+        } finally {
+            await stmt.finalizeAsync();
+        }
+    }
+
+    function validateContact(contact: Contact | Omit<Contact, "id">): boolean {
+        const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!regexEmail.test(contact.email)) throw new Error("Email informado invalido");
+        const regexTelefone = /^(\(?\d{2}\)?\s?)?(\d{4,5}-?\d{4})$/;
+        if(!regexTelefone.test(contact.email)) throw new Error("Telefone informado invalido"); // Aceita formatos com ou sem DDD, com ou sem traços, espaços ou parênteses.
+
         return true;
     }
 
