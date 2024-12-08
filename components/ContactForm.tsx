@@ -3,7 +3,6 @@ import { TouchableOpacity, Text, View, TextInput, Alert, StyleSheet } from 'reac
 import { useRouter } from 'expo-router';
 import { Contact } from '@/database/useContactsDatabase';
 
-
 export type ContactFormProps = {
     contact?: Contact;
 }
@@ -21,13 +20,16 @@ export const ContactForm = ({ contact }: ContactFormProps) => {
             return;
         }
         Alert.alert('Sucesso', `contato ${nome} cadastrado com sucesso!`);
-        router.back(); // Retorna para a tela anterior
+        setNome("");
+        setTelefone("");
+        setEmail("");
+        router.back(); 
     };
-
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Cadastro</Text>
+
             <Text className='label'>Nome</Text>
             <TextInput
                 style={styles.input}
@@ -50,9 +52,26 @@ export const ContactForm = ({ contact }: ContactFormProps) => {
                 onChangeText={setEmail}
                 keyboardType="email-address"
             />
-            <TouchableOpacity
-                style={[styles.customButton]} onPress={handleCadastro}>
-                <Text style={styles.customButtonText}>Salvar contato</Text></TouchableOpacity>
+            {!contact ?
+                <TouchableOpacity
+                    style={[styles.customButton]} onPress={handleCadastro}>
+                    <Text style={styles.customButtonText}>Salvar contato</Text>
+                </TouchableOpacity>
+                :
+                (
+                    <View>
+                        <TouchableOpacity
+                            style={[styles.customButton]} onPress={handleCadastro}>
+                            <Text style={styles.customButtonText}>Excluir contato</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={[styles.customButton]} onPress={handleCadastro}>
+                            <Text style={styles.customButtonText}>Editar contato</Text>
+                        </TouchableOpacity>
+                    </View>
+                )
+            }
+
         </View>
     )
 }
@@ -81,14 +100,14 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     customButton: {
-        backgroundColor: '#BBBBBB', // Cor do botão
+        backgroundColor: '#BBBBBB', 
         paddingVertical: 12,
         borderRadius: 8,
         alignItems: 'center',
         marginTop: 16,
     },
     customButtonText: {
-        color: '#000000', // Cor do texto
+        color: '#000000',
         fontSize: 16,
         fontWeight: 'bold',
     },

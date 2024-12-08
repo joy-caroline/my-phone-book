@@ -50,7 +50,7 @@ export default function TabLayout() {
           }}
         />
         <Tabs.Screen
-          name="details"
+          name="details/[id]"
           options={{
             tabBarButton: () => null, 
             headerShown: false, 

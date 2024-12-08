@@ -2,17 +2,18 @@ import ContactCard from "@/components/ContactCard";
 import EmptyContacts from "@/components/EmptyContacts";
 import { ThemedView } from "@/components/ThemedView";
 
-import { StyleSheet, Pressable, Text, Dimensions } from "react-native";
+import { StyleSheet, Pressable, Text, Dimensions, View, ScrollView } from "react-native";
 import { useRouter } from "expo-router";
 
 export default function HomeScreen() {
   const router = useRouter();
 
   const hasContact = [
-    { id: 1, name: "John" },
-    { id: 2, name: "Luisa" },
-    { id: 3, name: "Doe" },
-    { id: 4, name: "Sophia" },
+    { id: "1", name: "John" },
+    { id: "2", name: "Luisa" },
+    { id: '3', name: "Doe" },
+    { id: "4", name: "Sophia" },
+    { id: "4", name: "Sophia" },
   ];
 
   //Descomente para ver o estado de vazio
@@ -29,20 +30,14 @@ export default function HomeScreen() {
   };
 
   return (
-    <ThemedView style={styles.container}>
+    <View style={styles.container}>
       {hasContact && (
         <Text style={styles.title}>Meus Contatos</Text>
       )}
-      {renderContacts()}{" "}
-      {hasContact.length > 0 && (
-        <Pressable
-          style={styles.button}
-          onPress={() => router.push("/register")}
-        >
-          <Text style={styles.buttonText}>Adicionar Contato</Text>
-        </Pressable>
-      )}
-    </ThemedView>
+       <ScrollView contentContainerStyle={styles.scrollView}>
+        {renderContacts()}
+      </ScrollView>
+    </View>
   );
 }
 
@@ -50,13 +45,12 @@ const screenWidth = Dimensions.get("window").width;
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "column",
-    alignItems: "center",
-    justifyContent: "center",
+    flex: 1, 
     padding: 16,
-    maxWidth: screenWidth,
-    width: "100%",
-    paddingTop: 32,
+    backgroundColor: "#fff", 
+  },
+  scrollView: {
+    paddingBottom: 16, 
   },
   title: {
     fontSize: 24, 
@@ -70,10 +64,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#BBB",
     padding: 12,
     borderRadius: 8,
-    marginTop: 16,
+    // marginTop: 16,
     alignItems: "center",
     width: screenWidth * 0.6,
-    height: "auto"
   },
   buttonText: {
     color: "#000",
