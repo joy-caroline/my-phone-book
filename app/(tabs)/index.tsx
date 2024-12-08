@@ -3,24 +3,14 @@ import EmptyContacts from "@/components/EmptyContacts";
 import { ThemedView } from "@/components/ThemedView";
 
 import { StyleSheet, Text, Dimensions, ScrollView } from "react-native";
-
+import { useGetAllContacts } from "@/hooks/useGetAllContacts";
 export default function HomeScreen() {
-
-  const hasContact = [
-    { id: "1", name: "John" },
-    { id: "2", name: "Luisa" },
-    { id: "3", name: "Doe" },
-    { id: "4", name: "Sophia" },
-    { id: "5", name: "Sophia Paião" },
-  ];
-
-  //Descomente para ver o estado de vazio
-  // const hasContact = [];
+  const { data: hasContacts } = useGetAllContacts();
 
   const renderContacts = () => {
-    return hasContact.length > 0 ? (
-      hasContact.map((contact) => (
-        <ContactCard key={contact.name} contact={contact} />
+    return hasContacts && hasContacts.length > 0 ? (
+      hasContacts.map((contact) => (
+        <ContactCard key={contact.id} contact={{ id: contact.id, name: contact.name }} />
       ))
     ) : (
       <EmptyContacts />
@@ -29,9 +19,7 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      {hasContact && (
-        <Text style={styles.title}>Meus Contatos</Text>
-      )}
+      {hasContacts && <Text style={styles.title}>Meus Contatos</Text>}
       <ScrollView contentContainerStyle={styles.scrollView}>
         {renderContacts()}
       </ScrollView>
@@ -45,7 +33,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    
   },
   scrollView: {
     paddingBottom: 16,

@@ -1,40 +1,46 @@
-import React, { useState } from 'react';
-import { 
-  TouchableOpacity, 
-  Text, 
-  TextInput, 
-  Alert, 
-  StyleSheet, 
-  ScrollView, 
-  useColorScheme 
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { Contact } from '@/database/useContactsDatabase';
-import { ThemedView } from '@/components/ThemedView';
-import { Colors } from '@/constants/Colors';
+import React, { useState } from "react";
+import {
+  TouchableOpacity,
+  Text,
+  TextInput,
+  Alert,
+  StyleSheet,
+  ScrollView,
+  useColorScheme,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { Contact } from "@/database/useContactsDatabase";
+import { ThemedView } from "@/components/ThemedView";
+import { Colors } from "@/constants/Colors";
+import { useAddContact } from "@/hooks/useAddContact";
 
 export type ContactFormProps = {
   contact?: Contact;
 };
 
 export const ContactForm = ({ contact }: ContactFormProps) => {
+  const theme = useColorScheme() || "light";
   const router = useRouter();
-  const theme = useColorScheme() || 'light';
+  const { mutateAsync, isError, isSuccess, isPending } = useAddContact();
 
-  const [nome, setNome] = useState(contact ? contact.name : '');
-  const [telefone, setTelefone] = useState(contact ? contact.phone : '');
-  const [email, setEmail] = useState(contact ? contact.email : '');
+  const [nome, setNome] = useState(contact ? contact.name : "");
+  const [telefone, setTelefone] = useState(contact ? contact.phone : "");
+  const [email, setEmail] = useState(contact ? contact.email : "");
 
-  const handleCadastro = () => {
-    if (!nome || !email || !telefone) {
-      Alert.alert('Erro', 'Todos os campos são obrigatórios!');
-      return;
+  const handleSaveContact = async () => {
+    mutateAsync({ name: nome, phone: telefone, email });
+  
+    if (isSuccess) {
+      Alert.alert("Sucesso", `Contato ${nome} cadastrado com sucesso!`);
+      setNome("");
+      setTelefone("");
+      setEmail("");
+      router.back();
     }
-    Alert.alert('Sucesso', `Contato ${nome} cadastrado com sucesso!`);
-    setNome('');
-    setTelefone('');
-    setEmail('');
-    router.back();
+  
+    if (isError) {
+      Alert.alert("Erro", "Ocorreu um erro ao salvar o contato.");
+    }
   };
 
   const themedStyles = StyleSheet.create({
@@ -45,13 +51,13 @@ export const ContactForm = ({ contact }: ContactFormProps) => {
     },
     content: {
       flexGrow: 1,
-      justifyContent: 'center',
+      justifyContent: "center",
     },
     title: {
       fontSize: 24,
-      fontWeight: 'bold',
+      fontWeight: "bold",
       marginBottom: 20,
-      textAlign: 'center',
+      textAlign: "center",
       color: Colors[theme].text,
     },
     label: {
@@ -73,13 +79,13 @@ export const ContactForm = ({ contact }: ContactFormProps) => {
       backgroundColor: Colors[theme].buttonBackground,
       paddingVertical: 12,
       borderRadius: 8,
-      alignItems: 'center',
+      alignItems: "center",
       marginTop: 16,
     },
     customButtonText: {
       color: Colors[theme].buttonText,
       fontSize: 16,
-      fontWeight: 'bold',
+      fontWeight: "bold",
     },
   });
 
@@ -118,15 +124,24 @@ export const ContactForm = ({ contact }: ContactFormProps) => {
         />
 
         {!contact ? (
-          <TouchableOpacity style={themedStyles.customButton} onPress={handleCadastro}>
+          <TouchableOpacity
+            style={themedStyles.customButton}
+            onPress={handleSaveContact}
+          >
             <Text style={themedStyles.customButtonText}>Salvar contato</Text>
           </TouchableOpacity>
         ) : (
           <ThemedView>
-            <TouchableOpacity style={themedStyles.customButton} onPress={handleCadastro}>
+            <TouchableOpacity
+              style={themedStyles.customButton}
+              onPress={handleSaveContact}
+            >
               <Text style={themedStyles.customButtonText}>Excluir contato</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={themedStyles.customButton} onPress={handleCadastro}>
+            <TouchableOpacity
+              style={themedStyles.customButton}
+              onPress={handleSaveContact}
+            >
               <Text style={themedStyles.customButtonText}>Editar contato</Text>
             </TouchableOpacity>
           </ThemedView>

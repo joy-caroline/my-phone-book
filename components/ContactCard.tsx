@@ -5,7 +5,7 @@ import { Href, useRouter } from "expo-router";
 
 interface ContactCardProps {
   contact: {
-    id: string;
+    id: number;
     name: string;
   };
 }
