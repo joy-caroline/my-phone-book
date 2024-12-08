@@ -1,114 +1,137 @@
-import { useState } from 'react';
-import { TouchableOpacity, Text, View, TextInput, Alert, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { 
+  TouchableOpacity, 
+  Text, 
+  TextInput, 
+  Alert, 
+  StyleSheet, 
+  ScrollView, 
+  useColorScheme 
+} from 'react-native';
 import { useRouter } from 'expo-router';
 import { Contact } from '@/database/useContactsDatabase';
+import { ThemedView } from '@/components/ThemedView';
+import { Colors } from '@/constants/Colors';
 
 export type ContactFormProps = {
-    contact?: Contact;
-}
+  contact?: Contact;
+};
 
 export const ContactForm = ({ contact }: ContactFormProps) => {
-    const router = useRouter();
+  const router = useRouter();
+  const theme = useColorScheme() || 'light';
 
-    const [nome, setNome] = useState(contact ? contact.name : '');
-    const [telefone, setTelefone] = useState(contact ? contact.phone : '');
-    const [email, setEmail] = useState(contact ? contact.email : '');
+  const [nome, setNome] = useState(contact ? contact.name : '');
+  const [telefone, setTelefone] = useState(contact ? contact.phone : '');
+  const [email, setEmail] = useState(contact ? contact.email : '');
 
-    const handleCadastro = () => {
-        if (!nome || !email || !telefone) {
-            Alert.alert('Erro', 'Todos os campos são obrigatórios!');
-            return;
-        }
-        Alert.alert('Sucesso', `contato ${nome} cadastrado com sucesso!`);
-        setNome("");
-        setTelefone("");
-        setEmail("");
-        router.back(); 
-    };
+  const handleCadastro = () => {
+    if (!nome || !email || !telefone) {
+      Alert.alert('Erro', 'Todos os campos são obrigatórios!');
+      return;
+    }
+    Alert.alert('Sucesso', `Contato ${nome} cadastrado com sucesso!`);
+    setNome('');
+    setTelefone('');
+    setEmail('');
+    router.back();
+  };
 
-    return (
-        <View style={styles.container}>
-            <Text style={styles.title}>Cadastro</Text>
-
-            <Text className='label'>Nome</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Digite o nome da pessoa"
-                value={nome}
-                onChangeText={setNome}
-            />
-            <Text className='label'>Número de telefone</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Digite o número de contato"
-                value={telefone}
-                onChangeText={setTelefone}
-            />
-            <Text className='label'>Endereço de e-mail</Text>
-            <TextInput
-                style={styles.input}
-                placeholder="Digite o endereço de e-mail"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-            />
-            {!contact ?
-                <TouchableOpacity
-                    style={[styles.customButton]} onPress={handleCadastro}>
-                    <Text style={styles.customButtonText}>Salvar contato</Text>
-                </TouchableOpacity>
-                :
-                (
-                    <View>
-                        <TouchableOpacity
-                            style={[styles.customButton]} onPress={handleCadastro}>
-                            <Text style={styles.customButtonText}>Excluir contato</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            style={[styles.customButton]} onPress={handleCadastro}>
-                            <Text style={styles.customButtonText}>Editar contato</Text>
-                        </TouchableOpacity>
-                    </View>
-                )
-            }
-
-        </View>
-    )
-}
-
-
-const styles = StyleSheet.create({
+  const themedStyles = StyleSheet.create({
     container: {
-        flex: 1,
-        padding: 16,
-        justifyContent: 'center',
-        backgroundColor: '#f5f5f5',
+      flex: 1,
+      padding: 16,
+      backgroundColor: Colors[theme].background,
+    },
+    content: {
+      flexGrow: 1,
+      justifyContent: 'center',
     },
     title: {
-        fontSize: 24,
-        fontWeight: 'bold',
-        marginBottom: 20,
-        textAlign: 'center',
+      fontSize: 24,
+      fontWeight: 'bold',
+      marginBottom: 20,
+      textAlign: 'center',
+      color: Colors[theme].text,
+    },
+    label: {
+      fontSize: 16,
+      marginBottom: 8,
+      color: Colors[theme].text,
     },
     input: {
-        height: 50,
-        borderColor: '#212934',
-        borderWidth: 2,
-        borderRadius: 8,
-        paddingHorizontal: 16,
-        marginBottom: 16,
-        backgroundColor: '#fff',
+      height: 50,
+      borderColor: Colors[theme].border,
+      borderWidth: 1,
+      borderRadius: 8,
+      paddingHorizontal: 16,
+      marginBottom: 16,
+      backgroundColor: Colors[theme].inputBackground,
+      color: Colors[theme].text,
     },
     customButton: {
-        backgroundColor: '#BBBBBB', 
-        paddingVertical: 12,
-        borderRadius: 8,
-        alignItems: 'center',
-        marginTop: 16,
+      backgroundColor: Colors[theme].buttonBackground,
+      paddingVertical: 12,
+      borderRadius: 8,
+      alignItems: 'center',
+      marginTop: 16,
     },
     customButtonText: {
-        color: '#000000',
-        fontSize: 16,
-        fontWeight: 'bold',
+      color: Colors[theme].buttonText,
+      fontSize: 16,
+      fontWeight: 'bold',
     },
-});
+  });
+
+  return (
+    <ThemedView style={themedStyles.container}>
+      <ScrollView contentContainerStyle={themedStyles.content}>
+        <Text style={themedStyles.title}>Cadastro</Text>
+
+        <Text style={themedStyles.label}>Nome</Text>
+        <TextInput
+          style={themedStyles.input}
+          placeholder="Digite o nome da pessoa"
+          placeholderTextColor={Colors[theme].border}
+          value={nome}
+          onChangeText={setNome}
+        />
+
+        <Text style={themedStyles.label}>Número de telefone</Text>
+        <TextInput
+          style={themedStyles.input}
+          placeholder="Digite o número de contato"
+          placeholderTextColor={Colors[theme].border}
+          keyboardType="numeric"
+          value={telefone}
+          onChangeText={setTelefone}
+        />
+
+        <Text style={themedStyles.label}>Endereço de e-mail</Text>
+        <TextInput
+          style={themedStyles.input}
+          placeholder="Digite o endereço de e-mail"
+          placeholderTextColor={Colors[theme].border}
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+        />
+
+        {!contact ? (
+          <TouchableOpacity style={themedStyles.customButton} onPress={handleCadastro}>
+            <Text style={themedStyles.customButtonText}>Salvar contato</Text>
+          </TouchableOpacity>
+        ) : (
+          <ThemedView>
+            <TouchableOpacity style={themedStyles.customButton} onPress={handleCadastro}>
+              <Text style={themedStyles.customButtonText}>Excluir contato</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={themedStyles.customButton} onPress={handleCadastro}>
+              <Text style={themedStyles.customButtonText}>Editar contato</Text>
+            </TouchableOpacity>
+          </ThemedView>
+        )}
+      </ScrollView>
+    </ThemedView>
+  );
+};

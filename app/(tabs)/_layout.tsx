@@ -8,27 +8,28 @@ import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import Header from "../header";
 import { ThemedView } from "@/components/ThemedView";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const currentColors = Colors[colorScheme ?? "light"];
 
   return (
     <ThemedView>
       <Header />
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          tabBarActiveTintColor: currentColors.tabIconSelected,
+          tabBarInactiveTintColor: currentColors.tabIconDefault,
           headerShown: false,
           tabBarButton: HapticTab,
           tabBarBackground: TabBarBackground,
-          tabBarStyle: Platform.select({
-            ios: {
-              // Use a transparent background on iOS to show the blur effect
-              position: "absolute",
-            },
-            default: {},
-          }),
+          tabBarStyle: {
+            backgroundColor: currentColors.background, 
+            borderTopColor: currentColors.icon,
+            position: Platform.OS === "ios" ? "absolute" : "relative",
+          },
         }}
       >
         <Tabs.Screen
@@ -36,7 +37,7 @@ export default function TabLayout() {
           options={{
             title: "Home",
             tabBarIcon: ({ color }) => (
-              <MaterialIcons name="home" size={28} color="black" />
+              <MaterialIcons name="home" size={28} color={color} />
             ),
           }}
         />
@@ -45,16 +46,16 @@ export default function TabLayout() {
           options={{
             title: "Register",
             tabBarIcon: ({ color }) => (
-              <MaterialIcons name="person-add" size={28} color="black" />
+              <MaterialIcons name="person-add" size={28} color={color} />
             ),
           }}
         />
         <Tabs.Screen
           name="details/[id]"
           options={{
-            tabBarButton: () => null, 
-            headerShown: false, 
-            title: "Details", 
+            tabBarButton: () => null,
+            headerShown: false,
+            title: "Details",
           }}
         />
       </Tabs>
