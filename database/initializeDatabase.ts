@@ -14,14 +14,7 @@ export async function initializeDatabse(database: SQLiteDatabase) {
       );
     `);
 
-    // Inserção de um contato
-    await database.execAsync(`
-      INSERT INTO contact (name, phone, email)
-      VALUES ('John Doe da Silva', '99999999', 'joyce@email.com');
-    `);
-    
-    console.log("Contato inserido com sucesso!");
   } catch (error) {
-    console.error("Erro ao executar consulta:", error);
+    console.error("Erro ao inicializar o banco:", error);
   }
 }
