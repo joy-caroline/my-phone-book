@@ -5,10 +5,17 @@ import { useContactsDatabase } from "@/database/useContactsDatabase";
 export function useAddContact() {
   const { create } = useContactsDatabase();
 
-  const { mutate, isError, isSuccess, isPending } = useMutation<Pick<Contact, "id">, Error, Omit<Contact, "id">>({
+  const { mutate, isError, isPending, error } = useMutation<
+    Pick<Contact, "id">, 
+    Error, 
+    Omit<Contact, "id">
+  >({
     mutationKey: ["contacts"],
     mutationFn: (data: Omit<Contact, "id">) => create(data),
+    onError: (error) => {
+      console.error("Erro ao criar contato:", error.message);
+    },
   });
 
-  return { mutate, isError, isSuccess, isPending };
+  return { mutate, isError, isPending, error };
 }
