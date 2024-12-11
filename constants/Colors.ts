@@ -17,6 +17,7 @@ export const Colors = {
     tabIconDefault: '#bbbbbb', 
     tabIconSelected: '#000000', 
     icon: '#d9d9d9', 
+    disabledButtonBackground: '#f5f5f5',
   },
   dark: {
     background: '#121212', 
@@ -28,5 +29,6 @@ export const Colors = {
     tabIconDefault: '#666666', 
     tabIconSelected: '#ffffff', 
     icon: '#555555', 
+    disabledButtonBackground: '#f5f5f5',
   },
 };
