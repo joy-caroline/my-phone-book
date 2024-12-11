@@ -1,8 +1,7 @@
 import { Dimensions, Pressable, StyleSheet } from "react-native";
-import { ThemedView } from "./ThemedView";
 import { ThemedText } from "./ThemedText";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useRouter } from "expo-router";
+import { Href, useRouter } from "expo-router";
 
 interface ContactCardProps {
   contact: {
@@ -14,8 +13,9 @@ export default function ContactCard({ contact }: ContactCardProps) {
   const router = useRouter();
 
   const redirectDetails = () => {
-    router.push(`/details/${contact.id}`);
+    router.push(`/details/${contact.id}` as Href);
   };
+
   return (
     <Pressable style={styles.container} onPress={redirectDetails}>
       <MaterialIcons size={32} name="person" color="#000" />

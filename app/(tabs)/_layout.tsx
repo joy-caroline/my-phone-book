@@ -3,32 +3,33 @@ import React from "react";
 import { Platform } from "react-native";
 
 import { HapticTab } from "@/components/HapticTab";
-import { IconSymbol } from "@/components/ui/IconSymbol";
 import TabBarBackground from "@/components/ui/TabBarBackground";
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import Header from "../header";
 import { ThemedView } from "@/components/ThemedView";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export default function TabLayout() {
   const colorScheme = useColorScheme();
+
+  const currentColors = Colors[colorScheme ?? "light"];
 
   return (
     <ThemedView>
       <Header />
       <Tabs
         screenOptions={{
-          tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
+          tabBarActiveTintColor: currentColors.tabIconSelected,
+          tabBarInactiveTintColor: currentColors.tabIconDefault,
           headerShown: false,
           tabBarButton: HapticTab,
           tabBarBackground: TabBarBackground,
-          tabBarStyle: Platform.select({
-            ios: {
-              // Use a transparent background on iOS to show the blur effect
-              position: "absolute",
-            },
-            default: {},
-          }),
+          tabBarStyle: {
+            backgroundColor: currentColors.background, 
+            borderTopColor: currentColors.icon,
+            position: Platform.OS === "ios" ? "absolute" : "relative",
+          },
         }}
       >
         <Tabs.Screen
@@ -36,25 +37,25 @@ export default function TabLayout() {
           options={{
             title: "Home",
             tabBarIcon: ({ color }) => (
-              <IconSymbol size={28} name="house.fill" color={color} />
+              <MaterialIcons name="home" size={28} color={color} />
             ),
           }}
         />
         <Tabs.Screen
           name="register"
           options={{
-            title: "register",
+            title: "Register",
             tabBarIcon: ({ color }) => (
-              <IconSymbol size={28} name="paperplane.fill" color={color} />
+              <MaterialIcons name="person-add" size={28} color={color} />
             ),
           }}
         />
         <Tabs.Screen
-          name="details"
+          name="details/[id]"
           options={{
-            tabBarButton: () => null, 
-            headerShown: false, 
-            title: "Details", 
+            tabBarButton: () => null,
+            headerShown: false,
+            title: "Details",
           }}
         />
       </Tabs>

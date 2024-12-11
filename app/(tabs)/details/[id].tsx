@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TouchableOpacity,
   Text,
@@ -8,36 +8,42 @@ import {
   ScrollView,
   useColorScheme,
 } from "react-native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Contact } from "@/database/useContactsDatabase";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
-import { useAddContact } from "@/hooks/useAddContact";
+import { useEditContact } from "@/hooks/useEditContact";
+import { useGetContactById } from "@/hooks/useGetContactById";
 
-export default function CadastroScreen() {
+export default function DetailsScreen() {
+  const { id } = useLocalSearchParams();
   const theme = useColorScheme() || "light";
-  const router = useRouter();
+  const currentColors = Colors[theme];
 
-  const { mutate: addContact, isError, isSuccess } = useAddContact();
+  // Hook para buscar o contato por ID
+  const { data: contact, isLoading } = useGetContactById(Number(id));
 
+  // Estados para os campos
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
+
+  // Atualiza os estados quando o contato é carregado
+  useEffect(() => {
+    if (contact) {
+      setNome(contact.name);
+      setTelefone(contact.phone);
+      setEmail(contact.email);
+    }
+  }, [contact]);
+
+  useEffect(() => {
+    setIsButtonDisabled(true);
+  }, [nome, telefone, email]);
 
   const handleSaveContact = async () => {
-    addContact({ name: nome, phone: telefone, email });
-
-    if (isSuccess) {
-      Alert.alert("Sucesso", `Contato ${nome} cadastrado com sucesso!`);
-      setNome("");
-      setTelefone("");
-      setEmail("");
-      router.back();
-    }
-
-    if (isError) {
-      Alert.alert("Erro", "Ocorreu um erro ao salvar o contato.");
-    }
+    Alert.alert("Sucesso", `Contato ${nome} editado com sucesso!`);
   };
 
   const themedStyles = StyleSheet.create({
@@ -86,6 +92,14 @@ export default function CadastroScreen() {
     },
   });
 
+  if (isLoading) {
+    return (
+      <ThemedView style={themedStyles.container}>
+        <Text style={themedStyles.title}>Carregando...</Text>
+      </ThemedView>
+    );
+  }
+
   return (
     <ThemedView style={themedStyles.container}>
       <ScrollView contentContainerStyle={themedStyles.content}>
@@ -118,12 +132,21 @@ export default function CadastroScreen() {
           keyboardType="email-address"
         />
 
-        <TouchableOpacity
-          style={themedStyles.customButton}
-          onPress={handleSaveContact}
-        >
-          <Text style={themedStyles.customButtonText}>Salvar contato</Text>
-        </TouchableOpacity>
+        <ThemedView>
+          <TouchableOpacity
+            style={themedStyles.customButton}
+            onPress={handleSaveContact}
+            >
+            <Text style={themedStyles.customButtonText}>Excluir contato</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={themedStyles.customButton}
+            onPress={handleSaveContact}
+            disabled={isButtonDisabled}
+          >
+            <Text style={themedStyles.customButtonText}>Editar contato</Text>
+          </TouchableOpacity>
+        </ThemedView>
       </ScrollView>
     </ThemedView>
   );
