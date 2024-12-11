@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Contact } from "@/database/useContactsDatabase"; 
 import { useContactsDatabase } from "@/database/useContactsDatabase";
 
-export function useGetAllContacts({id} : Pick<Contact, "id">) {
+export function useGetContactById(id: number) {
   const { findById } = useContactsDatabase();
 
   const { data, isLoading, isError } = useQuery<Contact | null, Error>({
