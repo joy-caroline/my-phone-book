@@ -2,13 +2,13 @@ import { useMutation } from "@tanstack/react-query";
 import { Contact } from "@/database/useContactsDatabase"; 
 import { useContactsDatabase } from "@/database/useContactsDatabase";
 
-export function useEditContact(contact: Contact) {
+export function useEditContact() {
   const { updateOne } = useContactsDatabase();
 
-  const { mutate, isError, isSuccess, isPending } = useMutation<boolean | Error, Error>({
+  const { mutate: editContact, isError, isPending, error } = useMutation<boolean | Error, Error, Contact>({
     mutationKey: ["edit-contact"],
-    mutationFn: () => updateOne(contact),
+    mutationFn: (contact: Contact) => updateOne(contact),
   });
 
-  return { mutate, isError, isSuccess, isPending };
+  return { editContact, isError, error, isPending };
 }

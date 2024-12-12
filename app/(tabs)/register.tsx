@@ -16,28 +16,32 @@ import { useAddContact } from "@/hooks/useAddContact";
 
 export default function CadastroScreen() {
   const theme = useColorScheme() || "light";
+  const currentColors = Colors[theme];
   const router = useRouter();
 
-  const { mutate: addContact, isError, isSuccess } = useAddContact();
+
+  const { mutate: addContact } = useAddContact();
 
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
 
   const handleSaveContact = async () => {
-    addContact({ name: nome, phone: telefone, email });
-
-    if (isSuccess) {
-      Alert.alert("Sucesso", `Contato ${nome} cadastrado com sucesso!`);
-      setNome("");
-      setTelefone("");
-      setEmail("");
-      router.back();
-    }
-
-    if (isError) {
-      Alert.alert("Erro", "Ocorreu um erro ao salvar o contato.");
-    }
+    addContact(
+      { name: nome, phone: telefone, email },
+      {
+        onSuccess: () => {
+          Alert.alert("Sucesso", `Contato ${nome} cadastrado com sucesso!`);
+          setNome("");
+          setTelefone("");
+          setEmail("");
+          router.back();
+        },
+        onError: (error) => {
+          Alert.alert("Erro", error.message);
+        },
+      }
+    );
   };
 
   const themedStyles = StyleSheet.create({

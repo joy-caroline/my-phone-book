@@ -10,7 +10,7 @@ export function useGetAllContacts() {
     queryFn: (): Promise<Contact[]> => findAll(),
     staleTime: 1000 * 60 * 2,
     refetchOnWindowFocus: true,
-    refetchInterval: 1000 * 60 * 0.5,
+    refetchInterval: 1000,
   });
 
   return { data, isLoading, isError };

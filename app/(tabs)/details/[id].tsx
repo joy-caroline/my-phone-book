@@ -7,6 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   useColorScheme,
+  Dimensions,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Contact } from "@/database/useContactsDatabase";
@@ -14,22 +15,23 @@ import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { useEditContact } from "@/hooks/useEditContact";
 import { useGetContactById } from "@/hooks/useGetContactById";
+import { useDeleteContact } from "@/hooks/useDeleteContact";
 
 export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
+  const router = useRouter();
   const theme = useColorScheme() || "light";
   const currentColors = Colors[theme];
 
-  // Hook para buscar o contato por ID
   const { data: contact, isLoading } = useGetContactById(Number(id));
+  const { editContact } = useEditContact();
+  const { deleteContact, error } = useDeleteContact(Number(id));
 
-  // Estados para os campos
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
-  // Atualiza os estados quando o contato é carregado
   useEffect(() => {
     if (contact) {
       setNome(contact.name);
@@ -40,11 +42,48 @@ export default function DetailsScreen() {
 
   useEffect(() => {
     setIsButtonDisabled(true);
+    const hasChanges =
+      nome !== contact?.name ||
+      telefone !== contact?.phone ||
+      email !== contact?.email;
+    const isValid = nome.trim() && telefone.trim() && email.trim();
+    setIsButtonDisabled(!hasChanges || !isValid);
   }, [nome, telefone, email]);
 
-  const handleSaveContact = async () => {
-    Alert.alert("Sucesso", `Contato ${nome} editado com sucesso!`);
+  const handleEditContact = async () => {
+    editContact(
+      { id: Number(id), name: nome, phone: telefone, email },
+      {
+        onSuccess: () => {
+          Alert.alert("Sucesso", `Contato ${nome} editado com sucesso!`);
+          router.back();
+        },
+        onError: (error) => {
+          Alert.alert("Erro", error?.message);
+        },
+      }
+    );
   };
+
+  function handleDeleteContact() {
+    Alert.alert("Confirmação", "Deseja mesmo excluir o contato?", [
+      { text: "Cancelar", onPress: () => {} },
+      {
+        text: "Excluir",
+        onPress: async () => {
+          try {
+            await deleteContact();
+            Alert.alert("Sucesso", "Contato excluído com sucesso!");
+            router.back();
+          } catch (error) {
+            Alert.alert("Erro ao excluir contato.");
+          }
+        },
+      },
+    ]);
+  }
+
+  const screenWidth = Dimensions.get("window").width;
 
   const themedStyles = StyleSheet.create({
     container: {
@@ -78,12 +117,22 @@ export default function DetailsScreen() {
       backgroundColor: Colors[theme].inputBackground,
       color: Colors[theme].text,
     },
+    containerButtons: {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "space-between",
+    },
     customButton: {
       backgroundColor: Colors[theme].buttonBackground,
       paddingVertical: 12,
       borderRadius: 8,
       alignItems: "center",
       marginTop: 16,
+      width: screenWidth * 0.4,
+    },
+    customButtonDisabled: {
+      backgroundColor: Colors[theme].disabledButtonBackground || "#d3d3d3",
+      opacity: 0.6,
     },
     customButtonText: {
       color: Colors[theme].buttonText,
@@ -132,16 +181,19 @@ export default function DetailsScreen() {
           keyboardType="email-address"
         />
 
-        <ThemedView>
+        <ThemedView style={themedStyles.containerButtons}>
           <TouchableOpacity
             style={themedStyles.customButton}
-            onPress={handleSaveContact}
-            >
+            onPress={handleDeleteContact}
+          >
             <Text style={themedStyles.customButtonText}>Excluir contato</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            style={themedStyles.customButton}
-            onPress={handleSaveContact}
+            style={[
+              themedStyles.customButton,
+              isButtonDisabled && themedStyles.customButtonDisabled,
+            ]}
+            onPress={handleEditContact}
             disabled={isButtonDisabled}
           >
             <Text style={themedStyles.customButtonText}>Editar contato</Text>
