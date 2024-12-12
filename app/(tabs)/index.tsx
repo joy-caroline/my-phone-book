@@ -22,7 +22,7 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      {hasContacts && <Text style={styles.title}>Meus Contatos</Text>}
+      {!hasContacts && <Text style={styles.title}>Meus Contatos</Text>}
       <ScrollView contentContainerStyle={styles.scrollView}>
         {renderContacts()}
       </ScrollView>
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginBottom: 8,
     paddingBottom: 16,
-    color: "inherit",
+    color: "#ffffff",
   },
   button: {
     padding: 12,
