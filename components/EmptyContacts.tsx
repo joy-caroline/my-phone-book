@@ -11,7 +11,7 @@ export default function EmptyContacts() {
       style={styles.container}
       onPress={() => router.push("/register")}
     >
-      <MaterialIcons size={64} name="person" color={"white"} />
+      <MaterialIcons name="person-add-alt-1" size={64} color="white" />
       <ThemedText style={styles.title}>
         Você ainda não tem contatos aqui. Que tal começar adicionando alguém
         especial?
@@ -27,6 +27,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     maxHeight: 79,
     height: "100%",
+    marginTop: 200,
+    gap: 16
   },
   title: {
     color: "#FFFFFF",

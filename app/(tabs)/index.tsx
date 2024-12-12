@@ -10,7 +10,10 @@ export default function HomeScreen() {
   const renderContacts = () => {
     return hasContacts && hasContacts.length > 0 ? (
       hasContacts.map((contact) => (
-        <ContactCard key={contact.id} contact={{ id: contact.id, name: contact.name }} />
+        <ContactCard
+          key={contact.id}
+          contact={{ id: contact.id, name: contact.name }}
+        />
       ))
     ) : (
       <EmptyContacts />
