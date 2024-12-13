@@ -10,7 +10,6 @@ import {
   Dimensions,
 } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { Contact } from "@/database/useContactsDatabase";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { useEditContact } from "@/hooks/useEditContact";
@@ -21,11 +20,10 @@ export default function DetailsScreen() {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const theme = useColorScheme() || "light";
-  const currentColors = Colors[theme];
 
   const { data: contact, isLoading } = useGetContactById(Number(id));
   const { editContact } = useEditContact();
-  const { deleteContact, error } = useDeleteContact(Number(id));
+  const { deleteContact } = useDeleteContact(Number(id));
 
   const [nome, setNome] = useState("");
   const [telefone, setTelefone] = useState("");
@@ -151,6 +149,7 @@ export default function DetailsScreen() {
 
   return (
     <ThemedView style={themedStyles.container}>
+      <Text style={themedStyles.title}>Detalhes</Text>
       <ScrollView contentContainerStyle={themedStyles.content}>
         <Text style={themedStyles.label}>Nome</Text>
         <TextInput

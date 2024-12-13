@@ -9,16 +9,13 @@ import {
   useColorScheme,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Contact } from "@/database/useContactsDatabase";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { useAddContact } from "@/hooks/useAddContact";
 
 export default function CadastroScreen() {
   const theme = useColorScheme() || "light";
-  const currentColors = Colors[theme];
   const router = useRouter();
-
 
   const { mutate: addContact } = useAddContact();
 
@@ -57,7 +54,7 @@ export default function CadastroScreen() {
     title: {
       fontSize: 24,
       fontWeight: "bold",
-      marginBottom: 20,
+      marginBottom: 40,
       textAlign: "center",
       color: Colors[theme].text,
     },
@@ -93,6 +90,7 @@ export default function CadastroScreen() {
   return (
     <ThemedView style={themedStyles.container}>
       <ScrollView contentContainerStyle={themedStyles.content}>
+        <Text style={themedStyles.title}>Adicionar Contato</Text>
         <Text style={themedStyles.label}>Nome</Text>
         <TextInput
           style={themedStyles.input}
