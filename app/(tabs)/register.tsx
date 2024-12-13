@@ -9,14 +9,12 @@ import {
   useColorScheme,
 } from "react-native";
 import { useRouter } from "expo-router";
-import { Contact } from "@/database/useContactsDatabase";
 import { ThemedView } from "@/components/ThemedView";
 import { Colors } from "@/constants/Colors";
 import { useAddContact } from "@/hooks/useAddContact";
 
 export default function CadastroScreen() {
   const theme = useColorScheme() || "light";
-  const currentColors = Colors[theme];
   const router = useRouter();
 
   const { mutate: addContact } = useAddContact();
