@@ -22,7 +22,7 @@ export default function HomeScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      {!hasContacts && <Text style={styles.title}>Meus Contatos</Text>}
+      <Text style={styles.title}>Contatos</Text>
       <ScrollView contentContainerStyle={styles.scrollView}>
         {renderContacts()}
       </ScrollView>

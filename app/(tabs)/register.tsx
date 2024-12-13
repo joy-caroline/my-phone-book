@@ -19,7 +19,6 @@ export default function CadastroScreen() {
   const currentColors = Colors[theme];
   const router = useRouter();
 
-
   const { mutate: addContact } = useAddContact();
 
   const [nome, setNome] = useState("");
@@ -57,7 +56,7 @@ export default function CadastroScreen() {
     title: {
       fontSize: 24,
       fontWeight: "bold",
-      marginBottom: 20,
+      marginBottom: 40,
       textAlign: "center",
       color: Colors[theme].text,
     },
@@ -93,6 +92,7 @@ export default function CadastroScreen() {
   return (
     <ThemedView style={themedStyles.container}>
       <ScrollView contentContainerStyle={themedStyles.content}>
+        <Text style={themedStyles.title}>Adicionar Contato</Text>
         <Text style={themedStyles.label}>Nome</Text>
         <TextInput
           style={themedStyles.input}

@@ -1,50 +1,91 @@
-# Welcome to your Expo app 👋
+# **My Phone Book App**  
+Um aplicativo de gerenciamento de contatos desenvolvido com **React Native** utilizando **Expo Router** para navegação. Este projeto implementa um sistema de CRUD (Create, Read, Update, Delete) de contatos, com uma interface simples e eficiente.  
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## **Visão Geral**  
+O aplicativo permite ao usuário:  
+- Adicionar novos contatos com informações relevantes.  
+- Visualizar detalhes de contatos cadastrados.  
+- Editar informações de contatos existentes.  
+- Excluir contatos com um sistema de confirmação para evitar exclusões acidentais.  
 
-## Get started
+O sistema utiliza a estrutura de arquivos para definir rotas, aproveitando o poder do **Expo Router** para criar uma navegação dinâmica e organizada.  
 
-1. Install dependencies
 
-   ```bash
-   npm install
-   ```
+## **Estrutura do Projeto**  
+```plaintext  
+app  
+|-- tabs  
+|   |-- details  
+|   |   |-- [id].tsx          # Página de detalhes de um contato  
+|   |-- index.tsx            # Página principal com lista de contatos  
+|   |-- register.tsx         # Página de cadastro de novos contatos  
+|   |-- _layout.tsx          # Layout principal da tabBar  
+|-- +not-found.tsx           # Página exibida para rotas inexistentes  
+|-- header.tsx               # Componente de cabeçalho do app  
+|-- _layout.tsx              # Layout compartilhado do app  
+assets                       # Recursos estáticos, como imagens  
+components                   # Componentes reutilizáveis, como botões e cards  
+constants                    # Arquivos de constantes globais do projeto  
+database                     # Simulação de banco de dados local  
+hooks                        # Hooks personalizados para gerenciar estados e funcionalidades  
+```  
 
-2. Start the app
 
-   ```bash
-    npm run android
-   ```
 
-In the output, you'll find options to open the app in a
+## **Tecnologias Utilizadas**  
+- **React Native**  
+- **Expo Router**  
+- **TypeScript**  
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
-## Get a fresh project
+## **Funcionalidades Principais**  
+1. **CRUD de Contatos**  
+   - Criação, leitura, edição e exclusão de contatos.  
+   - Confirmação antes de excluir para evitar erros.  
 
-When you're ready, run:
+2. **Navegação Dinâmica**  
+   - Baseada na estrutura de arquivos, facilitada pelo **Expo Router**.  
+   - Rotas dinâmicas, como `/tabs/details/[id]`, para acessar informações específicas.  
 
-```bash
-npm run reset-project
-```
+3. **Design Consistente**  
+   - Utilização de layouts compartilhados (`_layout.tsx`) para manter a consistência visual em todas as páginas.  
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
 
-## Learn more
+## **Como Executar o Projeto**  
 
-To learn more about developing your project with Expo, look at the following resources:
+### Pré-requisitos  
+- Node.js instalado  
+- Expo CLI configurado  
+- Emulador ou dispositivo físico para testes  
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### Passos para executar  
+1. Clone o repositório:  
+   ```bash  
+   git clone https://github.com/joy-caroline/my-phone-book  
+   cd my-phone-book  
+   ```  
 
-## Join the community
+2. Instale as dependências:  
+   ```bash  
+   npm install  
+   ```  
 
-Join our community of developers creating universal apps.
+3. Inicie o projeto no Expo:  
+   ```bash  
+   npm start  
+   ```  
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+4. Escaneie o QR Code com o aplicativo Expo Go ou execute no emulador.  
+
+
+## **Melhorias Futuras**  
+- Adicionar animações para ações como excluir ou adicionar contatos.  
+- Implementar autenticação de usuário.  
+- Integrar com um banco de dados remoto para persistência de dados.  
+- Criar uma suíte de testes automatizados para garantir maior confiabilidade.  
+
+
+## **Licença**  
+Este projeto está licenciado sob a [Licença MIT](LICENSE).  
+
